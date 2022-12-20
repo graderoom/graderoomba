@@ -45,8 +45,8 @@ SUCCESS_MSG = "Your pairing code is **{}**. Type it into the notification on you
 TIMESTAMP_STR = '%a %H:%M:%S'
 SCHOOL_ROLE_IDS = {
     'bellarmine': 898399066734596106,
-    'BISV': 898398946118996098,
-    'NDSJ': 1038570324775686178
+    'basis': 898398946118996098,
+    'ndsj': 1038570324775686178
 }
 
 

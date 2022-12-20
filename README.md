@@ -1,7 +1,7 @@
 # graderoomba
 Graderoom Discord Bot
 
-Requires Python >3.8
+Requires Python >=3.8
 
 Rename `example.env` to `.env` and input required values
 

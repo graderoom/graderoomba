@@ -43,6 +43,7 @@ ERROR_CODES = {
 SUCCESS_MSG = "Your pairing code is **{}**. Type it into the notification on your Graderoom account. Your code expires" \
               " in 2 minutes."
 TIMESTAMP_STR = '%a %H:%M:%S'
+USER_ROLE_ID = 898395943030906912
 SCHOOL_ROLE_IDS = {
     'bellarmine': 898399066734596106,
     'basis': 898398946118996098,
@@ -90,6 +91,9 @@ async def roles_command(interaction) -> None:
     # Add role for school
     school = json_resp['school']
     role = interaction.guild.get_role(SCHOOL_ROLE_IDS[school])
+    roles_to_add.append(role)
+    # Add User role
+    role = interaction.guild.get_role(USER_ROLE_ID)
     roles_to_add.append(role)
     # todo add roles for donations
 

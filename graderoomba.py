@@ -50,6 +50,11 @@ SCHOOL_ROLE_IDS = {
     'ndsj': 1038570324775686178
 }
 BETA_TESTER_ROLE_ID = 897624644306239488
+DONOR_ROLE_IDS = {
+    'premium': 1061786853235249172,
+    'plus': 1061786582027337748,
+    'donor': 1061786078979297322
+}
 
 
 # Verify command to start pairing between Discord ID and Graderoom account
@@ -117,7 +122,12 @@ async def roles_command(interaction, beta: bool = False) -> None:
     if beta:
         role = interaction.guild.get_role(BETA_TESTER_ROLE_ID)
         roles_to_add.append(role)
-    # todo add roles for donations
+    # Add donation roles. Each key is true if amt is above threshold
+    dono_data = json_resp['donoData']
+    for key, role_id in DONOR_ROLE_IDS.items():
+        if dono_data[key]:
+            role = interaction.guild.get_role(role_id)
+            roles_to_add.append(role)
 
     # Give roles and respond to message
     for role in roles_to_add:

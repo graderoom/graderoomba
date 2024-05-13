@@ -15,6 +15,11 @@ GRADEROOM_KEY = os.environ.get("GRADEROOM_KEY")
 DISCORD_KEY = os.environ.get("DISCORD_KEY")
 MAIN_GUILD_ID = os.environ.get("MAIN_GUILD_ID")
 
+# Read blacklist
+with open("blacklist.txt", "a+") as f:
+    f.seek(0)
+    BLACKLIST = f.read().splitlines()
+
 # Set Intents
 intents = discord.Intents.default()
 intents.message_content = True
@@ -37,13 +42,16 @@ ERROR_CODES = {
     1: "Invalid Discord ID",
     2: "There is no Graderoom account with the given username.",
     3: "You've already linked this Discord account. Use `/roles` to get your roles.",
-    4: "The specified Graderoom account already has a linked Discord account.",
+    4: "The specified Graderoom account already has a different linked Discord account. "
+       "If you are trying to link a new Discord account, "
+       "first unlink the current account in your Graderoom Settings > Account > Open Discord Panel.",
     5: "You must connect your Discord account before you can get roles."
 }
 SUCCESS_MSG = "Your pairing code is **{}**. Type it into the notification on your Graderoom account. Your code " \
               "expires in 2 minutes. "
 TIMESTAMP_STR = '%a %H:%M:%S'
 USER_ROLE_ID = 898395943030906912
+CAN_CHANGE_NICKNAME_ROLE_ID = 1228431413989343273
 SCHOOL_ROLE_IDS = {
     'bellarmine': 898399066734596106,
     'basis': 898398946118996098,
@@ -67,7 +75,7 @@ async def verify_command(interaction, graderoom_username: str, beta: bool = Fals
     print(f"[{timestamp}] {discord_id} requested {site_type} verification for {graderoom_username}")
     # Set up and call API
     url = BETA_API_CONNECT_URL if beta else API_CONNECT_URL
-    body = {'username': graderoom_username, 'discordID': discord_id}
+    body = {'username': graderoom_username, 'discordID': f"{discord_id}"}
     resp = requests.post(url, headers=HEADERS, json=body)
     json_resp = resp.json()
 
@@ -97,7 +105,7 @@ async def roles_command(interaction, beta: bool = False) -> None:
     print(f"[{timestamp}] {discord_id} requested {site_type} roles")
     # Set up and call API
     url = BETA_API_USER_INFO_URL if beta else API_USER_INFO_URL
-    body = {'discordID': discord_id}
+    body = {'discordID': f"{discord_id}"}
     resp = requests.get(url, headers=HEADERS, json=body)
     json_resp = resp.json()
 
@@ -118,6 +126,10 @@ async def roles_command(interaction, beta: bool = False) -> None:
     # Add User role
     role = interaction.guild.get_role(USER_ROLE_ID)
     roles_to_add.append(role)
+    # Add allow speech role if not in blacklist
+    if f"{interaction.user.id}" not in BLACKLIST:
+        role = interaction.guild.get_role(CAN_CHANGE_NICKNAME_ROLE_ID)
+        roles_to_add.append(role)
     # Add role for beta
     if beta:
         role = interaction.guild.get_role(BETA_TESTER_ROLE_ID)

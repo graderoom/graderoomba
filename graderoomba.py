@@ -42,10 +42,10 @@ ERROR_CODES = {
     1: "Invalid Discord ID",
     2: "There is no Graderoom account with the given username.",
     3: "You've already linked this Discord account. Use `/roles` to get your roles.",
-    4: "The specified Graderoom account already has a different linked Discord account. "
+    4: "The specified Graderoom account already has a different linked Discord account.\n"
        "If you are trying to link a new Discord account, "
-       "first unlink the current account in your Graderoom Settings > Account > Open Discord Panel.",
-    5: "You must connect your Discord account before you can get roles."
+       "first unlink the current account in your Graderoom **Settings > Account > Open Discord Panel**.",
+    5: "You must use `/verify` to connect your Discord account before you can get roles."
 }
 SUCCESS_MSG = "Your pairing code is **{}**. Type it into the notification on your Graderoom account. Your code " \
               "expires in 2 minutes. "
